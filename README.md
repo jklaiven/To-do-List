@@ -29,7 +29,7 @@ Uma aplicação simples de **lista de tarefas** feita com **HTML, CSS e JavaScri
 
 ## 👨‍💻 Autor
 - João Klaiven  
-- [LinkedIn](https://www.linkedin.com/in/jklaiven)  
+- [LinkedIn](https://www.linkedin.com/in/joao-klaiven)  
 - [GitHub](https://github.com/jklaiven)
 
 📜 Licença
