@@ -1,108 +1,104 @@
-/***
- * Função: carregarTarefas
- * ------------------------
- * Objetivo:
- *   Recuperar as tarefas armazenadas no localStorage e renderizá-las na tela
- *
- * Observação:
- *   O localStorage salva tudo como string, por isso usamos JSON.parse
+const taskInput = document.getElementById("taskInput"); // Campo de texto para digitar a tarefa
+const addTaskBtn = document.getElementById("addTaskBtn"); // Botão para adicionar tarefa
+const taskList = document.getElementById("taskList"); // Lista (ul) onde as tarefas ficam
+const filterBtns = document.querySelectorAll(".filter-btn"); // Botões de filtro (todas, pendentes, concluídas)
+
+/**
+ * Evento: Clicar no botão "Adicionar"
  */
-function carregarTarefas() {
-  let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
-  tarefas.forEach(tarefa => {
-    criarItem(tarefa.texto, tarefa.concluida);
-  });
-}
+addTaskBtn.addEventListener("click", addTask);
 
-/***
- * Função: salvarTarefas
- * ----------------------
- * Objetivo:
- *   Pegar todas as tarefas da <ul> e salvar no localStorage
+/**
+ * Evento: Pressionar "Enter" no campo de texto
  */
-function salvarTarefas() {
-  let itens = document.querySelectorAll("#lista li");
-  let tarefas = [];
-
-  itens.forEach(li => {
-    tarefas.push({
-      texto: li.firstChild.textContent, // pega o texto
-      concluida: li.classList.contains("concluida") // verifica se está concluída
-    });
-  });
-
-  localStorage.setItem("tarefas", JSON.stringify(tarefas));
-}
-
-/***
- * Função: criarItem
- * -----------------
- * Objetivo:
- *   Criar um item <li> com:
- *    - Texto da tarefa
- *    - Botão de concluir ✅
- *    - Botão de excluir ❌
- *
- * Parâmetros:
- *   texto: string → texto da tarefa
- *   concluida: boolean → se a tarefa já está concluída (usado no carregamento inicial)
- */
-function criarItem(texto, concluida = false) {
-  let li = document.createElement("li");
-
-  // Define o texto da tarefa
-  li.innerText = texto;
-
-  // Se já estava concluída, aplica a classe
-  if (concluida) {
-    li.classList.add("concluida");
+taskInput.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    addTask();
   }
+});
 
-  // Botão de concluir ✅
-  let botaoConcluir = document.createElement("button");
-  botaoConcluir.innerText = "✅";
-  botaoConcluir.onclick = function () {
-    li.classList.toggle("concluida"); // alterna entre concluída/não concluída
-    salvarTarefas(); // atualiza no localStorage
-  };
+/***********************************************************
+ * Função: Adicionar nova tarefa
+ ***********************************************************/
+function addTask() {
+  const taskText = taskInput.value.trim(); // Remove espaços extras
 
-  // Botão de remover ❌
-  let botaoRemover = document.createElement("button");
-  botaoRemover.innerText = "❌";
-  botaoRemover.onclick = function () {
-    li.remove();
-    salvarTarefas(); // atualiza no localStorage
-  };
-
-  // Inserindo os botões dentro do li
-  li.appendChild(botaoConcluir);
-  li.appendChild(botaoRemover);
-
-  // Adiciona na lista
-  document.getElementById("lista").appendChild(li);
-
-  // Salvar no localStorage
-  salvarTarefas();
-}
-
-/***
- * Função: adicionarTarefa
- * ------------------------
- * Objetivo:
- *   Capturar texto do input, validar e criar um novo item na lista
- */
-function adicionarTarefa() {
-  let input = document.getElementById("novaTarefa");
-  let texto = input.value;
-
-  if (texto === "") {
+  // Verifica se o campo está vazio
+  if (taskText === "") {
     alert("Digite uma tarefa!");
     return;
   }
 
-  criarItem(texto); // cria o li na tela
-  input.value = ""; // limpa o campo
+  // Cria o elemento <li> para a tarefa
+  const li = document.createElement("li");
+  li.className = "task-item";
+  li.setAttribute("data-status", "pending"); // por padrão, a tarefa é "pendente"
+
+  // Conteúdo da tarefa
+  li.innerHTML = `
+    <span class="task-text">${taskText}</span>
+    <div class="task-actions">
+      <button class="done-btn">✔</button>
+      <button class="delete-btn">✖</button>
+    </div>
+  `;
+
+  // Evento: marcar como concluída
+  li.querySelector(".done-btn").addEventListener("click", function () {
+    li.classList.toggle("completed");
+
+    // Atualiza o status no atributo "data-status"
+    if (li.classList.contains("completed")) {
+      li.setAttribute("data-status", "completed");
+    } else {
+      li.setAttribute("data-status", "pending");
+    }
+  });
+
+  // Evento: deletar tarefa
+  li.querySelector(".delete-btn").addEventListener("click", function () {
+    li.remove();
+  });
+
+  // Adiciona a tarefa à lista
+  taskList.appendChild(li);
+
+  // Limpa o campo de input
+  taskInput.value = "";
 }
 
-// Quando a página carrega, puxar tarefas do localStorage
-window.onload = carregarTarefas;
+/***********************************************************
+ * Função: Filtrar tarefas
+ * -----------------------------------
+ * @param {string} filter - "all" | "pending" | "completed"
+ * 
+ * Essa função percorre todas as tarefas e:
+ * - Exibe todas, se filtro = "all"
+ * - Exibe apenas pendentes, se filtro = "pending"
+ * - Exibe apenas concluídas, se filtro = "completed"
+ ***********************************************************/
+function filterTasks(filter) {
+  const tasks = document.querySelectorAll(".task-item");
+
+  tasks.forEach((task) => {
+    const status = task.getAttribute("data-status");
+
+    if (filter === "all") {
+      task.style.display = "flex";
+    } else if (filter === status) {
+      task.style.display = "flex";
+    } else {
+      task.style.display = "none";
+    }
+  });
+}
+
+/**
+ * Eventos: Clique nos botões de filtro
+ */
+filterBtns.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    const filter = btn.getAttribute("data-filter"); // pega o filtro do botão
+    filterTasks(filter);
+  });
+});
