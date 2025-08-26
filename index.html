@@ -6,21 +6,42 @@
   <title>To-Do List</title>
 
   <link rel="stylesheet" href="style.css">
+  <!-- Fonte moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Ícones Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 <body>
 
-  <div class="container">
-    <h1>Minhas Tarefas</h1>
-    
-    <div class="input-area">
-      <input id="novaTarefa" type="text" placeholder="Digite uma tarefa">
-      <button onclick="adicionarTarefa()">Adicionar</button>
+  <div class="todo-container">
+    <h1><i class="fa-solid fa-list-check"></i> Minha To-Do List</h1>
+
+    <!-- Campo de adicionar -->
+    <div class="input-group">
+      <input type="text" id="taskInput" placeholder="Digite sua tarefa..." />
+      <button id="addTaskBtn"><i class="fa-solid fa-plus"></i></button>
     </div>
-    
-    <ul id="lista"></ul>
+
+    <!-- Botões de filtro -->
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">
+        <i class="fa-solid fa-list"></i> Todas
+      </button>
+      <button class="filter-btn" data-filter="pending">
+        <i class="fa-regular fa-circle"></i> Pendentes
+      </button>
+      <button class="filter-btn" data-filter="completed">
+        <i class="fa-solid fa-circle-check"></i> Concluídas
+      </button>
+    </div>
+
+    <!-- Lista de tarefas -->
+    <ul id="taskList"></ul>
   </div>
 
+  
   <script src="./script.js"></script>
   
 </body>
