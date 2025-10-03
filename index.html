@@ -5,44 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>To-Do List</title>
 
-  <link rel="stylesheet" href="style.css">
-  <!-- Fonte moderna -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- Ícones Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="./assets/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
 <body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+        <h1><i class="fas fa-infinity"></i> TO-DO-LIST</h1>
+        <p>Organize suas tarefas com estilo</p>
+    </header>
 
-  <div class="todo-container">
-    <h1><i class="fa-solid fa-list-check"></i> Minha To-Do List</h1>
-
-    <!-- Campo de adicionar -->
-    <div class="input-group">
-      <input type="text" id="taskInput" placeholder="Digite sua tarefa..." />
-      <button id="addTaskBtn"><i class="fa-solid fa-plus"></i></button>
+    <!-- Estatísticas -->
+    <div class="stats-container">
+        <div class="stat-card">
+            <i class="fas fa-tasks"></i>
+            <span id="total-tasks">0</span>
+            <small>Total</small>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-check-circle"></i>
+            <span id="completed-tasks">0</span>
+            <small>Concluídas</small>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-clock"></i>
+            <span id="pending-tasks">0</span>
+            <small>Pendentes</small>
+        </div>
     </div>
 
-    <!-- Botões de filtro -->
+    <!-- Formulário de Adicionar Tarefa -->
+    <form id="todo-form" class="todo-form">
+        <div class="input-group">
+            <i class="fas fa-plus input-icon"></i>
+            <input type="text" id="taskInput" placeholder="Adicionar nova tarefa..." required>
+            <button type="submit" class="add-btn" id="addTaskBtn">
+                <i class="fas fa-plus"></i> Adicionar
+            </button>
+        </div>
+    </form>
+
+    <!-- Filtros -->
     <div class="filters">
-      <button class="filter-btn active" data-filter="all">
-        <i class="fa-solid fa-list"></i> Todas
-      </button>
-      <button class="filter-btn" data-filter="pending">
-        <i class="fa-regular fa-circle"></i> Pendentes
-      </button>
-      <button class="filter-btn" data-filter="completed">
-        <i class="fa-solid fa-circle-check"></i> Concluídas
-      </button>
+        <button class="filter-btn active" data-filter="all">
+            <i class="fas fa-list"></i> Todas
+        </button>
+        <button class="filter-btn" data-filter="pending">
+            <i class="fas fa-clock"></i> Pendentes
+        </button>
+        <button class="filter-btn" data-filter="completed">
+            <i class="fas fa-check-circle"></i> Concluídas
+        </button>
     </div>
 
-    <!-- Lista de tarefas -->
-    <ul id="taskList"></ul>
+    <!-- Lista de Tarefas -->
+    <div id="taskList" class="task-list"></div>
   </div>
 
-  
-  <script src="./script.js"></script>
-  
+  <div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <h3><i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão</h3>
+        <p>Tem certeza que deseja excluir esta tarefa?</p>
+        <div class="modal-actions">
+            <button id="confirmCancel" class="modal-btn cancel-btn">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+            <button id="confirmDelete" class="modal-btn delete-btn">
+                <i class="fas fa-trash"></i> Excluir
+            </button>
+        </div>
+    </div>
+  </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
